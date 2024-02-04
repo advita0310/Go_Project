@@ -1,6 +1,12 @@
 package features
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 type Student struct{
 	Name string
@@ -14,15 +20,56 @@ type Class struct{
 }
 
 func(c *Class) NewClass(){
-	fmt.Println("Enter Name:")
-	var name string
-	fmt.Scanln(&name)
+	myStudents := []Student{}
+	file,err:=os.Open("db.txt")
 
-	fmt.Println("Enter PRN:")
-	var PRN string
-	fmt.Scanln(&PRN)
+	if(err!=nil){
+		panic(err)
+	}
 
-	fmt.Println("Enter Marks:")
-	var marks int
-	fmt.Scanln(&marks)
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		fields:= strings.Split(line," ")
+		marks,err:= strconv.Atoi(fields[2])
+
+		if err!=nil {
+			panic(err)
+		}
+
+		obj := Student{
+			Name : fields[0],
+			PRN : fields[1],
+			Marks : marks,
+		}
+
+		myStudents=append(myStudents,obj)
+	}
+
+	fmt.Println(myStudents)
+
+	// fmt.Println("Enter Name:")
+	// var name string
+	// fmt.Scanln(&name)
+
+	// fmt.Println("Enter PRN:")
+	// var PRN string
+	// fmt.Scanln(&PRN)
+
+	// fmt.Println("Enter Marks:")
+	// var marks int
+	// fmt.Scanln(&marks)
+
+	// obj := Student{
+	// 	Name: name,
+    //     PRN: PRN,
+    //     Marks: marks,
+	// }
+
+	// fmt.Println(obj)
+
+
 }

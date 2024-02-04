@@ -7,5 +7,8 @@ import (
 
 func main() {
 	fmt.Println("Hello DB")
+	var myclass features.Class
+
+	myclass.NewClass()
 
 }
