@@ -2,3 +2,8 @@ Harsh 1 100
 Yor 2 69
 Mikasa 3 96
 hiii 9 45
+har 23 565
+f 1 5
+db 2s 5
+aef 5 6
+k 5 8

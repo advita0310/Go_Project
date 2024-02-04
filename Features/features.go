@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type Student struct{
@@ -65,6 +66,7 @@ func (c *Class) ShowStudents(){
 }
 
 func (c *Class) AddStudent(){
+	var wg sync.WaitGroup
 	fmt.Println("Enter Name:")
 	var name string
 	fmt.Scanln(&name)
@@ -86,7 +88,8 @@ func (c *Class) AddStudent(){
 	c.Students = append(c.Students,obj)
 
 	//Writing data to the file
-	c.WriteToFile()
+	wg.Add(1)
+	go c.WriteToFile(&wg)
 	fmt.Println("Data Added")
 
 }
@@ -136,13 +139,14 @@ func (c *Class) DeleteStudent(){
 	fmt.Println("Data Deleted")
 }
 
-func (c *Class) WriteToFile(){
+func (c *Class) WriteToFile(wg *sync.WaitGroup){
+	defer wg.Done()
 
 	var data []string
 
 	for _,v:=range c.Students{
 		line:=fmt.Sprintf("%v %v %v",v.Name,v.PRN,v.Marks)
-		fmt.Println(line)
+		//fmt.Println(line)
 		data=append(data,line)
 	}
 

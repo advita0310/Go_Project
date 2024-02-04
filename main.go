@@ -12,6 +12,7 @@ func main() {
 	myclass.NewClass()
 
 	for {
+		fmt.Println("Choose an Option:")
 		fmt.Println("1.Show All Students")
         fmt.Println("2.Add Student")
         fmt.Println("3.Update Student")
