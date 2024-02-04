@@ -48,28 +48,107 @@ func(c *Class) NewClass(){
 
 		myStudents=append(myStudents,obj)
 	}
-
+	c.Students=myStudents
 	fmt.Println(myStudents)
 
-	// fmt.Println("Enter Name:")
-	// var name string
-	// fmt.Scanln(&name)
+	
 
-	// fmt.Println("Enter PRN:")
-	// var PRN string
-	// fmt.Scanln(&PRN)
+}
 
-	// fmt.Println("Enter Marks:")
-	// var marks int
-	// fmt.Scanln(&marks)
+func (c *Class) ShowStudents(){
+	for _,val := range c.Students{
+		name := val.Name
+		prn := val.PRN
+		marks := val.Marks
+		fmt.Println(name," ",prn," ",marks)
+	}
+}
 
-	// obj := Student{
-	// 	Name: name,
-    //     PRN: PRN,
-    //     Marks: marks,
-	// }
+func (c *Class) AddStudent(){
+	fmt.Println("Enter Name:")
+	var name string
+	fmt.Scanln(&name)
 
-	// fmt.Println(obj)
+	fmt.Println("Enter PRN:")
+	var prn string
+	fmt.Scanln(&prn)
 
+	fmt.Println("Enter Marks:")
+	var marks int
+	fmt.Scanln(&marks)
 
+	obj := Student{
+		Name: name,
+        PRN: prn,
+        Marks: marks,
+	}
+
+	c.Students = append(c.Students,obj)
+
+	//Writing data to the file
+	c.WriteToFile()
+	fmt.Println("Data Added")
+
+}
+
+func (c *Class) UpdateStudent(){
+    fmt.Println("Enter PRN:")
+    var prn string
+    fmt.Scanln(&prn)
+
+    for i,val := range c.Students{
+        if val.PRN == prn{
+            fmt.Println("Enter Name:")
+			var name string
+			fmt.Scanln(&name)
+
+			fmt.Println("Enter Marks:")
+			var marks int
+			fmt.Scanln(&marks)
+
+			fmt.Println("Enter PRN:")
+			var PRN string
+			fmt.Scanln(&PRN)
+			c.Students[i]=Student{Name: name,PRN: PRN,Marks: marks}
+        }
+    }
+	fmt.Println("Data Updated")
+}
+
+func (c *Class) DeleteStudent(){
+	fmt.Println("Enter PRN:")
+    var prn string
+    fmt.Scanln(&prn)
+	var idx int
+    for i,val := range c.Students{
+        if val.PRN == prn{
+           idx = i;
+		   break; 
+        }
+    }
+
+	tempArr:=c.Students
+
+	tempArr=append(tempArr[:idx],tempArr[idx+1:]...)
+
+	c.Students=tempArr
+
+	fmt.Println("Data Deleted")
+}
+
+func (c *Class) WriteToFile(){
+
+	var data []string
+
+	for _,v:=range c.Students{
+		line:=fmt.Sprintf("%v %v %v",v.Name,v.PRN,v.Marks)
+		fmt.Println(line)
+		data=append(data,line)
+	}
+
+	err:=os.WriteFile("db.txt",[]byte(strings.Join(data,"\n")),0664)
+	if err!=nil{
+        fmt.Println(err.Error())
+    }
+	fmt.Println("Data Written")
 }
